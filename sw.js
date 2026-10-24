@@ -2,7 +2,7 @@
    - La API (script.google.com) SIEMPRE va a la red, nunca se cachea.
    - index.html va a la red primero (para recibir actualizaciones) con caché de respaldo.
    - El resto (íconos, manifest) se sirve de caché. */
-const CACHE = 'tablero-tmb-v1';
+const CACHE = 'tablero-tmb-v2';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-180.png'];
 
 self.addEventListener('install', e => {
@@ -12,7 +12,7 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(keys => Promise.all(keys.filter(k => k.startsWith('tablero-tmb-') && k !== CACHE).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
